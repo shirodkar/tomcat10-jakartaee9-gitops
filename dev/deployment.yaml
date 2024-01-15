@@ -1,0 +1,45 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: sample-tomcat10-app
+  namespace: demo-tomcat
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      deployment: demo-tomcat-app
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        deployment: demo-tomcat-app
+    spec:
+      containers:
+        - name: sample-tomcat10-app
+          image: >-
+            image-registry.openshift-image-registry.svc:5000/demo-tomcat/sample-tomcat10-app@sha256:524dd1ae13f1a3bb86fb4b27f9cb26e7fd63ab758c529fd48a29a1410ef6254e
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+            - containerPort: 8443
+              protocol: TCP
+            - containerPort: 8778
+              protocol: TCP
+            - containerPort: 9404
+              protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          imagePullPolicy: IfNotPresent
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      securityContext: {}
+      schedulerName: default-scheduler
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 25%
+      maxSurge: 25%
+  revisionHistoryLimit: 10
+  progressDeadlineSeconds: 600
