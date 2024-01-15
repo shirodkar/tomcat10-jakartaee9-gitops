@@ -1,0 +1,15 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: demo-tomcat-gitops-app
+spec:
+  destination:
+    name: ''
+    namespace: demo-tomcat
+    server: 'https://kubernetes.default.svc'
+  source:
+    path: dev
+    repoURL: 'https://github.com/shirodkar/tomcat10-jakartaee9-gitops.git'
+    targetRevision: HEAD
+  sources: []
+  project: demo-tomcat
